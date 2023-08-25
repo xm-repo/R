@@ -3,8 +3,8 @@ lint:
 	flake8 .
 	isort .
 
-venv:
-	python3 -m venv venv && source venv/bin/activate && python3 -m pip install -r requirements.txt
+deps:
+	source venv/bin/activate && python3 -m pip install --default-timeout=100 -r requirements.txt && deactivate
 
 run:
-	sudo bash -c 'source venv/bin/activate && python3 main.py &'
+	sudo bash -c "source venv/bin/activate && python3 main.py &"
