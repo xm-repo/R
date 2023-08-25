@@ -1,5 +1,6 @@
-from aiohttp import web
+import ssl
 
+from aiohttp import web
 
 with open("main.html") as main_page_file:
     main_page = main_page_file.read()
@@ -17,4 +18,9 @@ app.add_routes(
 )
 
 if __name__ == "__main__":
-    web.run_app(app, port=80)
+    ssl_context = ssl.create_default_context(ssl.Purpose.CLIENT_AUTH)
+    ssl_context.load_cert_chain(
+        "/etc/letsencrypt/live/reptiloid.fun/fullchain.pem",
+        "/etc/letsencrypt/live/reptiloid.fun/privkey.pem",
+    )
+    web.run_app(app, port=443, ssl_context=ssl_context)
