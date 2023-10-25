@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html>
 
@@ -9,33 +8,47 @@
   <link rel="icon" type="image" href="https://storage.yandexcloud.net/reptiloid/R.ico">
 
   <style>
-  img {
-    display: block;
-    margin-left: auto;
-    margin-right: auto;
-  }
+    img {
+      display: block;
+      margin-left: auto;
+      margin-right: auto;
+    }
 
-  .centered {
+    .centered {
       position: fixed;
       top: 50%;
       left: 50%;
       transform: translate(-50%, -50%);
-  }
+    }
+
+    .happybday {
+      text-align: center;
+      color: green;
+      margin-top: 40%;
+      font-size: xxx-large;
+    }
   </style>
 
 </head>
 
 <body>
 
-<img id="REPTILOID" src="https://storage.yandexcloud.net/reptiloid/reptiloid1.jpg" class="centered" style="width:10%;" onclick="hello()">
+  <div>
+    <img id="REPTILOID" src="https://storage.yandexcloud.net/reptiloid/reptiloid1.jpg" class="centered"
+      style="width:10%;" onclick="hello()">
+  </div>
 
-<script>
-  function hello() {
-    img = document.getElementById("REPTILOID");
-    img.style.transform = "scale(100)";
-    img.style.transition = "transform 10s ease";
-  }
-</script>
+  <div class="happybday">
+    <h1>🐸С Днем Rождения!🐸<h1>
+  </div>
+
+  <script>
+    function hello() {
+      img = document.getElementById("REPTILOID");
+      img.style.transform = "scale(100)";
+      img.style.transition = "transform 10s ease";
+    }
+  </script>
 
 </body>
 
