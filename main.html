@@ -1,55 +1,59 @@
-<!DOCTYPE html>
+<!doctype html>
 <html>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
 
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link
+      rel="icon"
+      type="image"
+      href="https://storage.yandexcloud.net/reptiloid/R.ico"
+    />
 
-  <link rel="icon" type="image" href="https://storage.yandexcloud.net/reptiloid/R.ico">
+    <style>
+      img {
+        display: block;
+        margin-left: auto;
+        margin-right: auto;
+      }
 
-  <style>
-    img {
-      display: block;
-      margin-left: auto;
-      margin-right: auto;
-    }
+      .centered {
+        position: fixed;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+      }
 
-    .centered {
-      position: fixed;
-      top: 50%;
-      left: 50%;
-      transform: translate(-50%, -50%);
-    }
+      .happybday {
+        text-align: center;
+        color: green;
+        margin-top: 40%;
+        font-size: xxx-large;
+      }
+    </style>
+  </head>
 
-    .happybday {
-      text-align: center;
-      color: green;
-      margin-top: 40%;
-      font-size: xxx-large;
-    }
-  </style>
+  <body>
+    <div>
+      <img
+        id="REPTILOID"
+        src="{}"
+        class="centered"
+        style="width: 10%"
+        onclick="hello()"
+      />
+    </div>
 
-</head>
+    <div class="happybday">
+      <h1>🐸С Днем Rождения!🐸</h1>
+    </div>
 
-<body>
-
-  <div>
-    <img id="REPTILOID" src="https://storage.yandexcloud.net/reptiloid/reptiloid1.jpg" class="centered"
-      style="width:10%;" onclick="hello()">
-  </div>
-
-  <div class="happybday">
-    <h1>🐸С Днем Rождения!🐸<h1>
-  </div>
-
-  <script>
-    function hello() {
-      img = document.getElementById("REPTILOID");
-      img.style.transform = "scale(100)";
-      img.style.transition = "transform 10s ease";
-    }
-  </script>
-
-</body>
-
+    <script>
+      function hello() {
+        img = document.getElementById("REPTILOID");
+        img.style.transform = "scale(100)";
+        img.style.transition = "transform 10s ease";
+      }
+    </script>
+  </body>
 </html>
