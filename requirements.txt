@@ -2,3 +2,4 @@ aiohttp
 black
 flake8
 isort
+jinja2
