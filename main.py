@@ -5,7 +5,8 @@ from aiohttp import web
 
 import settings
 
-reptiloid = "https://storage.yandexcloud.net/reptiloid/reptiloid1.jpg"
+reptiloid1 = "https://storage.yandexcloud.net/reptiloid/reptiloid1.jpg"
+reptiloid2 = "https://storage.yandexcloud.net/reptiloid/reptiloid2.jpg"
 family = "https://storage.yandexcloud.net/reptiloid/family.jpg"
 
 jenv = jinja2.Environment(loader=jinja2.FileSystemLoader(searchpath="./"))
@@ -13,11 +14,24 @@ main_page = jenv.get_template("main.html")
 
 
 async def handle_main(request):
-    return web.Response(text=main_page.render(photo=reptiloid), content_type="text/html")
+    return web.Response(
+        text=main_page.render(photo=reptiloid1, bday=False),
+        content_type="text/html",
+    )
 
 
 async def handle_family(request):
-    return web.Response(text=main_page.render(photo=family), content_type="text/html")
+    return web.Response(
+        text=main_page.render(photo=family, bday=False),
+        content_type="text/html",
+    )
+
+
+async def handle_bday(request):
+    return web.Response(
+        text=main_page.render(photo=reptiloid2, bday=True),
+        content_type="text/html",
+    )
 
 
 def main():
@@ -32,6 +46,7 @@ def main():
         [
             web.get("/", handle_main),
             web.get("/family/", handle_family),
+            web.get("/bday/", handle_bday),
         ]
     )
 
