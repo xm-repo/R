@@ -1,5 +1,6 @@
 import ssl
 
+import jinja2
 from aiohttp import web
 
 import settings
@@ -7,16 +8,16 @@ import settings
 reptiloid = "https://storage.yandexcloud.net/reptiloid/reptiloid1.jpg"
 family = "https://storage.yandexcloud.net/reptiloid/family.jpg"
 
-with open("main.html") as main_page_file:
-    main_page = main_page_file.read()
+jenv = jinja2.Environment(loader=jinja2.FileSystemLoader(searchpath="./"))
+main_page = jenv.get_template("main.html")
 
 
 async def handle_main(request):
-    return web.Response(text=main_page.format(reptiloid), content_type="text/html")
+    return web.Response(text=main_page.render(photo=reptiloid), content_type="text/html")
 
 
 async def handle_family(request):
-    return web.Response(text=main_page.format(family), content_type="text/html")
+    return web.Response(text=main_page.render(photo=family), content_type="text/html")
 
 
 def main():
