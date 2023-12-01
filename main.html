@@ -17,6 +17,13 @@
         margin-right: auto;
       }
 
+      textarea {
+        resize: none;
+        border-style: none;
+        border-color: Transparent;
+        font-size: x-large;
+      }
+
       .centered {
         position: fixed;
         top: 50%;
@@ -48,6 +55,11 @@
     <div class="happybday">
       <h1>🐸С Днем Rождения!🐸</h1>
     </div>
+    {% endif %} {% if gpt %}
+    <textarea readonly id="advice" name="advice" rows="5" cols="100">
+    {{ advice }}
+  </textarea
+    >
     {% endif %}
 
     <script>
