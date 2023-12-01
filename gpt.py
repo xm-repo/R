@@ -22,7 +22,7 @@ async def query() -> str:
         "generationOptions": {
             "partialResults": True,
             "temperature": 0.99,
-            "maxTokens": 100,
+            "maxTokens": 7400,
         },
         "instructionText": "ты злобная ведьма",
         "requestText": (
