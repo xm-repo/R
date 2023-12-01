@@ -82,7 +82,7 @@ async def query() -> str:
             "maxTokens": 7400,
         },
         "instructionText": prompt["instructionText"],
-        "requestText": prompt["instructionText"],
+        "requestText": prompt["requestText"],
     }
 
     async with aiohttp.ClientSession() as session:
