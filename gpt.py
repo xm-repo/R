@@ -1,67 +1,41 @@
+import contextlib
 import json
 import logging
 import random
+import sqlite3
 from http import HTTPStatus
 
 import aiohttp
 
+import prompts
 import settings
 
 logger = logging.getLogger(__name__)
 
-PROMPTS = [
-    {
-        "instructionText": "ты старая злобная ведьма",
-        "requestText": (
-            "напиши проклятие в древнеегипетском или ассирийском или древнегреческом "
-            "или средневековом или евангельском стиле проклятий, используй высокопарную речь, "
-            "не пиши про близких, семью и болезни "
-            "можешь писать до 5 предложений  "
-        ),
-    },
-    {
-        "instructionText": (
-            "ты - коварное древнее зло под именем Рептилоид, "
-            "ты зеленый, у тебя нет носа, у тебя длинные уши, "
-            "тебе нужно изощренно проклясть меня"
-        ),
-        "requestText": (
-            "в начале представься - напиши, что ты Рептилоид и добавь "
-            "к своему имени несколько титулов и описаний, которые будут звучат угрожающе и жутко, "
-            "используй не более трех предложений. Далее напиши смешное проклятие в древнеегипетском "
-            "стиле или древнеримском стиле или древнегреческом стиле или средневековом стиле, прокляни, "
-            "унизь и оскорби меня, используй высокопарную речь, напиши не менее пяти предложений. "
-            "Используй только русский язык"
-        ),
-    },
-    {
-        "instructionText": (
-            "ты - коварное древнее зло под именем Рептилоид, " "ты зеленый, тебе нужно изощренно проклясть меня"
-        ),
-        "requestText": (
-            "в начале представься - напиши, что ты Рептилоид и добавь "
-            "к своему имени несколько титулов и описаний, которые будут звучат "
-            "угрожающе и жутко, используй не более трех предложений. "
-            "Далее напиши смешное и ироничное проклятие в древнеегипетском или ассирийском или "
-            "древнегреческом или древнеримском или древних майя или лавкрафта или средневековом или "
-            "евангельском или эзотерическом стиле проклятий, прокляни, унизь и оскорби меня, "
-            "используй высокопарную речь, напиши не менее пяти предложений. Используй только русский язык"
-        ),
-    },
-    {
-        "instructionText": (
-            "ты - коварное древнее зло под именем Рептилоид, " "ты зеленый, тебе нужно изощренно проклясть меня"
-        ),
-        "requestText": (
-            "в начале представься - напиши, что ты Рептилоид и добавь "
-            "к своему имени несколько титулов и описаний, которые будут звучат "
-            "угрожающе и жутко, используй не более трех предложений. Далее напиши "
-            "проклятие в древнеегипетском или ассирийском или древнегреческом или средневековом "
-            "или евангельском стиле проклятий, прокляни, унизь и оскорби меня, используй высокопарную речь, "
-            "напиши не менее пяти предложений. Используй только русский язык"
-        ),
-    },
-]
+
+def save_response(request: str, response: str):
+    with contextlib.closing(sqlite3.connect(settings.DATABASE_FILE)) as connection:
+        with connection:
+            connection.execute(
+                "CREATE TABLE IF NOT EXISTS responses (id integer PRIMARY KEY, request text, response text)"
+            )
+            connection.execute(f"INSERT INTO responses VALUES (NULL, '{request}', '{response}')")
+
+
+def _get_random_response():
+    with contextlib.closing(sqlite3.connect(settings.DATABASE_FILE)) as connection:
+        with connection:
+            cursor = connection.cursor()
+            res = cursor.execute("SELECT response FROM responses ORDER BY RANDOM() LIMIT 1;")
+            return res.fetchone()[0]
+
+
+def get_random_response():
+    try:
+        return _get_random_response()
+    except Exception:
+        logging.exception("Error in get_random_response")
+        return "Ooops!"
 
 
 # Скарябай себе веки ржавыми гвоздями, Рассыпься пылью по сырой земле!
@@ -72,13 +46,13 @@ async def query() -> str:
         "Content-Type": "application/json",
     }
 
-    prompt = random.choice(PROMPTS)
+    prompt = random.choice(prompts.PROMPTS)
 
     data = {
         "model": "general",
         "generationOptions": {
             "partialResults": True,
-            "temperature": 0.99,
+            "temperature": random.choice([0.7, 0.75, 0.8, 0.85, 0.9, 0.95, 0.99]),
             "maxTokens": 7400,
         },
         "instructionText": prompt["instructionText"],
@@ -93,11 +67,17 @@ async def query() -> str:
         ) as response:
             response_text = await response.text()
             logger.info("Response from gpt: %s", response_text)
+
             if response.status != HTTPStatus.OK:
-                return "Ooops!"
+                return get_random_response()
+
             parts = []
             for part in response_text.split("\n"):
                 if len(part) == 0:
                     break
                 parts.append(json.loads(part))
-            return parts[-1]["result"]["alternatives"][0]["text"]
+
+            result = parts[-1]["result"]["alternatives"][0]["text"]
+            save_response(json.dumps(data), result)
+
+            return result
