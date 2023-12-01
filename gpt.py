@@ -92,9 +92,9 @@ async def query() -> str:
             json=data,
         ) as response:
             response_text = await response.text()
+            logger.info("Response from gpt: %s", response_text)
             if response.status != HTTPStatus.OK:
                 return "Ooops!"
-            logger.info("Response from gpt: %s", response_text)
             parts = []
             for part in response_text.split("\n"):
                 if len(part) == 0:

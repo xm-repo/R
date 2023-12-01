@@ -17,16 +17,18 @@
         margin-right: auto;
       }
 
-      textarea {
-        resize: none;
-        border-style: none;
-        border-color: Transparent;
+      .advice {
+        text-align: center;
         font-size: x-large;
+        margin-top: 45%;
+        max-width: 80%;
+        margin-left: auto;
+        margin-right: auto;
       }
 
       .centered {
         position: fixed;
-        top: 50%;
+        top: 45%;
         left: 50%;
         transform: translate(-50%, -50%);
       }
@@ -102,7 +104,7 @@
     {% endif %}
     
     {% if gpt %}
-    <textarea readonly id="advice" name="advice" rows="10" cols="150">
+    <div class="advice">
       {{ advice }}
     </textarea>
     {% endif %}
